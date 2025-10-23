@@ -87,13 +87,76 @@ void delete_from_beginning(struct node **head){
     *head = next;
 }
 
+
+void insert_at_specific_position(struct node **head, int data, int position) {
+    if (position < 1) {
+        printf("Invalid position.\n");
+        return;
+    }
+
+    struct node *new_node = malloc(sizeof(struct node));
+    
+    new_node->data = data;
+    new_node->link = NULL;
+
+    if (position == 1) {
+        new_node->link = *head;
+        *head = new_node;
+        printf("Inserted %d at position 1.\n", data);
+        return;
+    }
+
+    struct node *ptr = *head;
+    int count = 1;
+
+    while (ptr != NULL && count < position - 1) {
+        ptr = ptr->link;
+        count++;
+    }
+
+    if (ptr == NULL) {
+        printf("Position out of range.\n");
+        free(new_node);
+        return;
+    }
+
+    new_node->link = ptr->link;
+    ptr->link = new_node;
+
+    printf("Inserted %d at position %d.\n", data, position);
+}
+
+void delete_from_specific_position(struct node **head, int position){
+    if (*head == NULL || position < 1) return;
+
+    struct node *ptr = *head;
+    struct node *prev = NULL;
+    int count = 1;
+
+    if (position == 1){
+        *head = ptr->link;
+        free(ptr);
+        return;
+    }
+
+    while (ptr != NULL && count < position){
+        prev = ptr;
+        ptr = ptr->link;
+        count++;
+    }
+
+    if (ptr == NULL) return;
+
+    prev->link = ptr->link;
+    free(ptr);
+}
+
+
 int main(){
     
     struct node *head = malloc(sizeof(struct node));
     head->data = 1;
     head->link = NULL;
     print_list(head);
-    delete_from_end(&head);
-    print_list(head);
-    return 0;
+   return 0;
 }
