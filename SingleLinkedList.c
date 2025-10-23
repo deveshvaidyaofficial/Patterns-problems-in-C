@@ -8,9 +8,8 @@ struct node{
 
 
 void print_list(struct node *head){
-   struct node *ptr = head;
-   
-   if (ptr == NULL){
+   struct node *ptr = head; 
+   if (head == NULL){
        printf("List is empty.\n");
        return;
    }   
@@ -38,14 +37,15 @@ void add_at_end(struct node *head, int data){
 }
 
 
-void delete_from_end(struct node *head){
-    struct node *ptr = head;
+void delete_from_end(struct node **head){
+    struct node *ptr = *head;
     struct node *prev = NULL;
     
 
-    if (ptr->link == NULL){
-        printf("List only has one element: %d. Deleting...\n", head->data);
-        free(ptr);
+    if ((*head)->link == NULL){
+        printf("List only has one element: %d. Deleting...\n", (*head)->data);
+        free(*head);
+        *head = NULL;
         return;
     } 
 
@@ -60,7 +60,7 @@ void delete_from_end(struct node *head){
     free(ptr);
 }
 
-void add_at_beggining(struct node **head, int data){
+void add_at_beginning(struct node **head, int data){
     struct node *ptr = *head;
     struct node *new_node = malloc(sizeof(struct node));
     new_node->data = data;
@@ -68,7 +68,23 @@ void add_at_beggining(struct node **head, int data){
 
     new_node->link = *head;
     *head = new_node;
-    printf("Value added to the beggining of the list: %d\n", (*head)->data);
+    printf("Value added to the beginning of the list: %d\n", (*head)->data);
+}
+
+void delete_from_beginning(struct node **head){
+    struct node *ptr = *head;
+    struct node *next = (*head)->link;
+    
+    if((*head)->link == NULL){
+        printf("List only has one value: %d. Deleting...\n", ptr->data);
+        free(*head);
+        head = NULL;
+        return;
+    }
+
+    printf("Deleting value from the beginning of the list: %d\n", ptr->data);
+    free(ptr);
+    *head = next;
 }
 
 int main(){
@@ -77,7 +93,7 @@ int main(){
     head->data = 1;
     head->link = NULL;
     print_list(head);
-    add_at_beggining(&head, 232);
+    delete_from_end(&head);
     print_list(head);
     return 0;
 }
